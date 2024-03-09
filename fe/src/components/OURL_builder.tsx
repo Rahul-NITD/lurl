@@ -8,7 +8,7 @@ export interface IURL_BuilderProps {}
 
 import { IKeyValueCheckProps } from "./Headers_dropdown";
 
-export function URL_Builder(props: IURL_BuilderProps) {
+export function URL_Builder() {
   const BASEURL = "https://aargee.pythonanywhere.com/curl?";
   const [method, setMethod] = useState("GET");
   const [url, setUrl] = useState("");

@@ -112,7 +112,7 @@ const HeadersContent = (props: IHeaderProps) => (
               <TableCell className="p-1">
                 <Checkbox
                   checked={h.include}
-                  onCheckedChange={(e) =>
+                  onCheckedChange={() =>
                     props.setHeader((prev) =>
                       prev.map((val, idx) =>
                         idx === index ? { ...val, include: !val.include } : val
@@ -141,8 +141,8 @@ const HeadersContent = (props: IHeaderProps) => (
               </TableCell>
               <TableCell
                 className="p-0"
-                onClick={(e) =>
-                  props.setHeader((prev) => prev.filter((v, i) => i != index))
+                onClick={() =>
+                  props.setHeader((prev) => prev.filter((_, i) => i != index))
                 }
               >
                 <Button variant={"outline"} className="border-none px-0 py-0">
@@ -169,7 +169,7 @@ const HeadersContent = (props: IHeaderProps) => (
       </Table>
       <div className="text-xs text-end cursor-pointer flex justify-end">
         <svg
-          onClick={(e) => {
+          onClick={() => {
             props.setHeader((prev) => [...prev, EmptyHeader]);
           }}
           width="18"
@@ -245,7 +245,7 @@ export function MainTab(props: ITabProps) {
         },
         {
           name: "query",
-          node: <>To Be implemented</>,
+          node: <QueryContent />,
         },
       ]}
     />

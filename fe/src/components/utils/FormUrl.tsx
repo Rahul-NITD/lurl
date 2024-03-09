@@ -13,7 +13,7 @@ export default function FormUrl(props: IFormURL) {
     ).join(",")}}`
     const val = `${props.BASE_URL}req=${props.req}&method=${props.method}&header=${hdrs}`
     return (
-        <span onClick={e => navigator.clipboard.writeText(val)} className="cursor-pointer">
+        <span onClick={() => navigator.clipboard.writeText(val)} className="cursor-pointer">
             {val}
         </span>
     )
