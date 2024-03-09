@@ -17,6 +17,7 @@ import {
 import { Checkbox } from "./ui/checkbox";
 import { TabsLayout } from "./Content_tabs";
 import { Button } from "./ui/button";
+import { useState } from "react";
 
 const QueryContent = () => (
   <Card className="rounded-none">
@@ -25,7 +26,7 @@ const QueryContent = () => (
         Query Parameters
       </CardTitle>
       <CardDescription>
-        <span className="text-gray-300">https://foo.bar?</span>
+        <span className="text-gray-300">curl https://foo.bar?</span>
         <span>key=value</span>
       </CardDescription>
     </CardHeader>
@@ -87,13 +88,16 @@ const EmptyHeader = {
 };
 
 const HeadersContent = (props: IHeaderProps) => (
-  <Card>
+  <Card className="rounded-none">
     <CardHeader>
       <CardTitle className="font-thin text-lg uppercase tracking-widest">
         Headers
       </CardTitle>
       <CardDescription>
-        <span>Add Header key value pairs</span>
+        <span className="text-gray-300">
+          curl https://reqbin.com/echo/get/json -H{" "}
+          <span className="text-gray-600">"key: value"</span>
+        </span>
       </CardDescription>
     </CardHeader>
     <CardContent className="">
@@ -190,24 +194,108 @@ const HeadersContent = (props: IHeaderProps) => (
   </Card>
 );
 
-const AuthContent = () => (
-  <Card>
+const BasicAuth = () => {
+  return (
+    <div>
+      <p className="capitalize tracking-widest font-extralight py-3">
+        basic authentication<span className="text-red-600">*</span>
+      </p>
+      <div className="grid grid-cols-[max-content_auto] items-center gap-3">
+        <div className="">Username</div>
+        <div className="">
+          <Input
+            className="border-x-0 rounded-none border-t-0 border-b"
+            placeholder="aargee"
+          />
+        </div>
+        <div className="">Password</div>
+        <div className="">
+          <Input
+            className="border-x-0 rounded-none border-t-0 border-b"
+            placeholder="*********"
+          />
+        </div>
+      </div>
+      <p className="text-red-500 text-xs pt-3">
+        *Use at your own risk! The username and password will be visible in the
+        link and can be hacked easily.
+      </p>
+    </div>
+  );
+};
+
+const BearerAuth = () => {
+  const [prefix, setPrefix] = useState("Bearer");
+  return (
+    <div>
+      <p className="capitalize tracking-widest font-extralight py-3">
+        bearer authentication<span className="text-red-600">*</span>
+      </p>
+      <p>Bearer Token</p>
+      <textarea
+        className="w-full border focus-visible:outline-none p-3"
+        rows={4}
+        placeholder="HJBJAF87687SFG8676SG868SG...."
+      />
+      <div className="grid grid-cols-[max-content_auto] items-center gap-3">
+        <div className="">Token Prefix</div>
+        <div className="">
+          <Input
+            className="border-x-0 rounded-none border-t-0 border-b"
+            placeholder="Bearer"
+            value={prefix}
+            onChange={(e) => setPrefix(e.target.value)}
+          />
+        </div>
+      </div>
+      <p className="text-red-500 text-xs pt-3">
+        *Use at your own risk! The token will be visible in the link and can be
+        hacked easily.
+      </p>
+    </div>
+  );
+};
+
+const NoneAuth = (props: {setAuth: React.Dispatch<React.SetStateAction<IAuthBearerProps | IAuthNoneProps>>}) => {
+  return (
+    <p className="py-3">You are good to go! {": )"}</p>
+  )
+}
+
+interface IAuthContentProps {
+  auth: IAuthBearerProps | IAuthNoneProps;
+  setAuth: React.Dispatch<React.SetStateAction<IAuthBearerProps | IAuthNoneProps>>;
+}
+
+const AuthContent = (props: IAuthContentProps) => (
+  <Card className="rounded-none">
     <CardHeader>
       <CardTitle className="font-thin text-lg uppercase tracking-widest">
         Authentication
       </CardTitle>
-      <CardDescription>Add authentication parameters here</CardDescription>
+      <CardDescription>
+        <span className="text-gray-300">
+          curl -X POST https://reqbin.com/echo/get/json -H{" "}
+          <span className="text-gray-600">
+            "Authorization: Bearer {"<token>"}"
+          </span>
+        </span>
+      </CardDescription>
     </CardHeader>
     <CardContent className="">
       <TabsLayout
         tabs={[
           {
             name: "None",
-            node: <>Helu</>,
+            node: <NoneAuth setAuth={props.setAuth} />,
           },
           {
             name: "Basic",
-            node: <>Hi</>,
+            node: <>To Be Implemented!</> || <BasicAuth />,
+          },
+          {
+            name: "Bearer",
+            node: <BearerAuth />,
           },
         ]}
       />
@@ -221,9 +309,21 @@ export interface IKeyValueCheckProps {
   include: boolean;
 }
 
+export interface IAuthBearerProps {
+  type: "Bearer";
+  prefix: string;
+  token: string;
+}
+
+export interface IAuthNoneProps {
+  type: "None";
+}
+
 export interface ITabProps {
   headers: IKeyValueCheckProps[];
   setHeader: React.Dispatch<React.SetStateAction<IKeyValueCheckProps[]>>;
+  auth: IAuthBearerProps | IAuthNoneProps;
+  setAuth: React.Dispatch<React.SetStateAction<IAuthBearerProps | IAuthNoneProps>>;
 }
 
 export function MainTab(props: ITabProps) {
@@ -241,7 +341,7 @@ export function MainTab(props: ITabProps) {
         },
         {
           name: "auth",
-          node: <AuthContent />,
+          node: <AuthContent auth={props.auth} setAuth={props.setAuth} />,
         },
         {
           name: "query",

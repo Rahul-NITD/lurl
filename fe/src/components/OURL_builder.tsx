@@ -6,7 +6,7 @@ import FormUrl from "./utils/FormUrl";
 
 export interface IURL_BuilderProps {}
 
-import { IKeyValueCheckProps } from "./Headers_dropdown";
+import { IKeyValueCheckProps, IAuthBearerProps, IAuthNoneProps } from "./Headers_dropdown";
 
 export function URL_Builder() {
   const BASEURL = "https://aargee.pythonanywhere.com/curl?";
@@ -19,6 +19,9 @@ export function URL_Builder() {
       include: true,
     },
   ]);
+  const [auth, setAuth] = useState<IAuthBearerProps | IAuthNoneProps>({
+    type: "None"
+  })
 
   return (
     <div className="grid grid-cols-2 p-5 mx-20">
@@ -39,7 +42,7 @@ export function URL_Builder() {
           </div>
         </div>
         <div className="w-full col-span-2">
-          <MainTab headers={headers} setHeader={setHeaders} />
+          <MainTab headers={headers} setHeader={setHeaders} auth={auth} setAuth={setAuth} />
         </div>
       </div>
       <div className="res px-3">
