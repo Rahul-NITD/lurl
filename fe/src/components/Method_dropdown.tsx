@@ -29,9 +29,12 @@ const ChevronDown = () => (
   </svg>
 );
 
-export function MethodDropDown() {
-  const [position, setPosition] = React.useState("get");
+export interface IMethodDropDown {
+  method: string;
+  setMethod: React.Dispatch<React.SetStateAction<string>>;
+}
 
+export function MethodDropDown({method, setMethod}: IMethodDropDown) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,16 +42,16 @@ export function MethodDropDown() {
         variant={"outline"}
           className="uppercase h-full bg-white text-black rounded-none border-y-0 border-l-0 flex justify-between w-28"
         >
-          <span className="">{position}</span>
+          <span className="">{method}</span>
           <span>
             <ChevronDown />
           </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="">
-        <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-          <DropdownMenuRadioItem value="get">GET</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="post">POST</DropdownMenuRadioItem>
+        <DropdownMenuRadioGroup value={method} onValueChange={setMethod}>
+          <DropdownMenuRadioItem value="GET">GET</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="POST">POST</DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
