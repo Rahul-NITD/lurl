@@ -1,10 +1,10 @@
-import { OURL_Builder } from "./components/OURL_builder"
+import { URL_Builder } from "./components/OURL_builder"
 
 function App() {
 
   return (
     <div>
-      <OURL_Builder />
+      <URL_Builder />
     </div>
   )
 }
